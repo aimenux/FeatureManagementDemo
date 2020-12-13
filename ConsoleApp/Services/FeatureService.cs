@@ -18,7 +18,7 @@ namespace ConsoleApp.Services
 
         public async Task ListFeaturesAsync()
         {
-            const string contextualFeature = nameof(FeatureFlags.FeatureI);
+            const string contextualFeature = nameof(FeatureFlags.FeatureJ);
 
             var features = Enum.GetNames<FeatureFlags>()
                 .Where(f => f != contextualFeature)
@@ -27,7 +27,7 @@ namespace ConsoleApp.Services
             foreach (var feature in features)
             {
                 var isEnabled = await _featureManager.IsEnabledAsync(feature);
-                Console.WriteLine($"Feature {feature}: {isEnabled}");
+                Console.WriteLine($"Feature '{feature}' is enabled ? {isEnabled}.");
             }
 
             await ListContextualFeatureAsync(contextualFeature);
@@ -37,7 +37,7 @@ namespace ConsoleApp.Services
         {
             var context = new RuntimeInformationContext("Windows", "X64");
             var isEnabled = await _featureManager.IsEnabledAsync(feature, context);
-            Console.WriteLine($"Feature {feature}: {isEnabled}");
+            Console.WriteLine($"Feature '{feature}' is enabled ? {isEnabled}.");
         }
     }
 }

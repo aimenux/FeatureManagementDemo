@@ -51,6 +51,7 @@ namespace ConsoleApp
                         .AddFeatureFilter<PercentageFilter>()
                         .AddFeatureFilter<TimeWindowFilter>()
                         .AddFeatureFilter<RandomFeatureFilter>()
+                        .AddFeatureFilter<IpAddressFeatureFilter>()
                         .AddFeatureFilter<OperatingSystemFeatureFilter>()
                         .AddFeatureFilter<RuntimeInformationFeatureFilter>();
             });

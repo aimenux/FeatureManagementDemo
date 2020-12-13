@@ -9,7 +9,6 @@ namespace ConsoleApp.Filters
     public class RandomFeatureFilter : IFeatureFilter
     {
         private const string Alias = "Random";
-        private static readonly Random Random = new Random(Guid.NewGuid().GetHashCode());
 
         private readonly ILogger _logger;
 
@@ -20,13 +19,20 @@ namespace ConsoleApp.Filters
 
         public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
         {
-            var value = Random.Next();
+            var value = Randomize.GetNumber();
             var isEnabled = value % 3 == 0;
             if (!isEnabled)
             {
-                _logger.LogWarning($"Feature '{Alias}' is not enabled for '{value}'.");
+                _logger.LogWarning($"Feature '{Alias}' is not enabled for current value '{value}'.");
             }
             return Task.FromResult(isEnabled);
+        }
+
+        private static class Randomize
+        {
+            private static readonly Random Random = new Random(Guid.NewGuid().GetHashCode());
+
+            public static int GetNumber() => Random.Next();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace ConsoleApp.Filters
             var isEnabled = runtimeContext.Equals(appContext);
             if (!isEnabled)
             {
-                _logger.LogWarning($"Feature '{Alias}' is not enabled for '{appContext}'.");
+                _logger.LogWarning($"Feature '{Alias}' is not enabled for current context '{appContext}'.");
             }
             return Task.FromResult(isEnabled);
         }

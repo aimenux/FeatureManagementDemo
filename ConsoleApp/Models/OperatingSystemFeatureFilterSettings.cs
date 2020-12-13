@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Runtime.InteropServices;
 
 namespace ConsoleApp.Models
 {
@@ -6,9 +6,26 @@ namespace ConsoleApp.Models
     {
         public string Value { get; set; }
 
-        public bool IsWindows()
+        public OSPlatform GetFeatureOSPlatform() => OSPlatform.Create(Value);
+
+        public static OSPlatform? GetCurrentOSPlatform()
         {
-            return string.Equals(Value, "Windows", StringComparison.OrdinalIgnoreCase);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return OSPlatform.Windows;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return OSPlatform.Linux;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return OSPlatform.OSX;
+            }
+
+            return null;
         }
     }
 }

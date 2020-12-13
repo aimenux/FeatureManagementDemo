@@ -20,11 +20,12 @@ namespace ConsoleApp.Filters
 
         public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
         {
+            var currentOSPlatform = OperatingSystemFeatureFilterSettings.GetCurrentOSPlatform();
             var settings = context.Parameters.Get<OperatingSystemFeatureFilterSettings>();
-            var isEnabled = settings.IsWindows();
+            var isEnabled = settings.GetFeatureOSPlatform() == currentOSPlatform;
             if (!isEnabled)
             {
-                _logger.LogWarning($"Feature '{Alias}' is not enabled for '{settings.Value}'.");
+                _logger.LogWarning($"Feature '{Alias}' is not enabled for current operating system '{currentOSPlatform}'.");
             }
             return Task.FromResult(isEnabled);
         }
