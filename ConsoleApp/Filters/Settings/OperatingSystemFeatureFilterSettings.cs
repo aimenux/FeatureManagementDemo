@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ConsoleApp.Models
+namespace ConsoleApp.Filters.Settings
 {
     public class OperatingSystemFeatureFilterSettings
     {

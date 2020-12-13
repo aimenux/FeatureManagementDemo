@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleApp.Models
+namespace ConsoleApp.Filters.Contexts.Runtime
 {
     public class RuntimeInformationContext
     {

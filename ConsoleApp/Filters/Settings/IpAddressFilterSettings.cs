@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace ConsoleApp.Models
+namespace ConsoleApp.Filters.Settings
 {
     public class IpAddressFilterSettings
     {

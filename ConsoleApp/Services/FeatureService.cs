@@ -1,5 +1,5 @@
 ﻿using ConsoleApp.Constants;
-using ConsoleApp.Models;
+using ConsoleApp.Filters.Contexts.Runtime;
 using Microsoft.FeatureManagement;
 using System;
 using System.Linq;
@@ -18,10 +18,10 @@ namespace ConsoleApp.Services
 
         public async Task ListFeaturesAsync()
         {
-            const string contextualFeature = nameof(FeatureFlags.FeatureJ);
+            //const string contextualFeature = nameof(FeatureFlags.FeatureJ);
 
             var features = Enum.GetNames<FeatureFlags>()
-                .Where(f => f != contextualFeature)
+                //.Where(f => f != contextualFeature)
                 .ToList();
 
             foreach (var feature in features)
@@ -30,14 +30,14 @@ namespace ConsoleApp.Services
                 Console.WriteLine($"Feature '{feature}' is enabled ? {isEnabled}.");
             }
 
-            await ListContextualFeatureAsync(contextualFeature);
+            //await ListContextualFeatureAsync(contextualFeature);
         }
 
-        private async Task ListContextualFeatureAsync(string feature)
-        {
-            var context = new RuntimeInformationContext("Windows", "X64");
-            var isEnabled = await _featureManager.IsEnabledAsync(feature, context);
-            Console.WriteLine($"Feature '{feature}' is enabled ? {isEnabled}.");
-        }
+        //private async Task ListContextualFeatureAsync(string feature)
+        //{
+        //    var context = new RuntimeInformationContext("Windows", "X64");
+        //    var isEnabled = await _featureManager.IsEnabledAsync(feature, context);
+        //    Console.WriteLine($"Feature '{feature}' is enabled ? {isEnabled}.");
+        //}
     }
 }

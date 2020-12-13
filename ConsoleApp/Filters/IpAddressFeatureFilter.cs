@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Models;
+﻿using ConsoleApp.Filters.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;

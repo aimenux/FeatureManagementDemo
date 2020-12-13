@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Models;
+﻿using ConsoleApp.Filters.Contexts.Runtime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
@@ -16,6 +16,12 @@ namespace ConsoleApp.Filters
         public RuntimeInformationFeatureFilter(ILogger logger)
         {
             _logger = logger;
+        }
+
+        public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext featureFilterContext)
+        {
+            var appContext = new RuntimeInformationContext("Windows", "X64");
+            return EvaluateAsync(featureFilterContext, appContext);
         }
 
         public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext featureFilterContext, RuntimeInformationContext appContext)

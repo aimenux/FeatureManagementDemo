@@ -11,6 +11,7 @@
         FeatureG,
         FeatureH,
         FeatureI,
-        FeatureJ
+        FeatureJ,
+        FeatureK
     }
 }

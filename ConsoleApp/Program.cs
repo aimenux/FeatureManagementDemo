@@ -1,4 +1,5 @@
 ﻿using ConsoleApp.Filters;
+using ConsoleApp.Filters.Contexts.Identity;
 using ConsoleApp.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,21 +47,25 @@ namespace ConsoleApp
             })
             .ConfigureServices((hostingContext, services) =>
             {
-                services.AddTransient<IFeatureService, FeatureService>();
                 services.AddFeatureManagement()
                         .AddFeatureFilter<PercentageFilter>()
                         .AddFeatureFilter<TimeWindowFilter>()
                         .AddFeatureFilter<RandomFeatureFilter>()
                         .AddFeatureFilter<IpAddressFeatureFilter>()
+                        .AddFeatureFilter<ContextualTargetingFilter>()
+                        .AddFeatureFilter<IdentityUserFeatureFilter>()
                         .AddFeatureFilter<OperatingSystemFeatureFilter>()
                         .AddFeatureFilter<RuntimeInformationFeatureFilter>();
+
+                services.AddTransient<ContextualTargetingFilter>();
+                services.AddTransient<IFeatureService, FeatureService>();
+                services.AddTransient<IIdentityUserProvider, InMemoryIdentityUserProvider>();
             });
 
         private static void AddConsoleLogger(this ILoggingBuilder loggingBuilder)
         {
             loggingBuilder.AddSimpleConsole(options =>
             {
-                options.SingleLine = true;
                 options.IncludeScopes = true;
                 options.TimestampFormat = "[HH:mm:ss:fff] ";
                 options.ColorBehavior = LoggerColorBehavior.Enabled;
