@@ -20,8 +20,8 @@ namespace ConsoleApp.Filters
 
         public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
         {
-            var currentIpAddress = IpAddressFilterSettings.GetCurrentIpAddress();
-            var settings = context.Parameters.Get<IpAddressFilterSettings>();
+            var currentIpAddress = IpAddressFeatureFilterSettings.GetCurrentIpAddress();
+            var settings = context.Parameters.Get<IpAddressFeatureFilterSettings>();
             var isEnabled = settings.Values.Contains(currentIpAddress);
             if (!isEnabled)
             {

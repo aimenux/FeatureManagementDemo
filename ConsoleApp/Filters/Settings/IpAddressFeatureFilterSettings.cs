@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace ConsoleApp.Filters.Settings
 {
-    public class IpAddressFilterSettings
+    public class IpAddressFeatureFilterSettings
     {
         public ICollection<string> Values { get; set; }
 
