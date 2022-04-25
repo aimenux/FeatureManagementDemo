@@ -1,33 +1,30 @@
-﻿using ConsoleApp.Filters.Settings;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using System.Threading.Tasks;
+using ConsoleApp.Models;
 
-namespace ConsoleApp.Filters
+namespace ConsoleApp.Filters;
+
+[FilterAlias("OperatingSystem")]
+public class OperatingSystemFeatureFilter : IFeatureFilter
 {
-    [FilterAlias(Alias)]
-    public class OperatingSystemFeatureFilter : IFeatureFilter
+    private readonly ILogger _logger;
+
+    public OperatingSystemFeatureFilter(ILogger logger)
     {
-        private const string Alias = "OperatingSystem";
+        _logger = logger;
+    }
 
-        private readonly ILogger _logger;
-
-        public OperatingSystemFeatureFilter(ILogger logger)
+    public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
+    {
+        var currentOsPlatform = OperatingSystemFeatureFilterSettings.GetCurrentOsPlatform();
+        var settings = context.Parameters.Get<OperatingSystemFeatureFilterSettings>();
+        var isEnabled = settings.GetFeatureOsPlatform() == currentOsPlatform;
+        if (!isEnabled)
         {
-            _logger = logger;
+            _logger.LogWarning($"Feature '{context.FeatureName}' is not enabled for current operating system '{currentOsPlatform}'.");
         }
-
-        public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
-        {
-            var currentOSPlatform = OperatingSystemFeatureFilterSettings.GetCurrentOSPlatform();
-            var settings = context.Parameters.Get<OperatingSystemFeatureFilterSettings>();
-            var isEnabled = settings.GetFeatureOSPlatform() == currentOSPlatform;
-            if (!isEnabled)
-            {
-                _logger.LogWarning($"Feature '{Alias}' is not enabled for current operating system '{currentOSPlatform}'.");
-            }
-            return Task.FromResult(isEnabled);
-        }
+        return Task.FromResult(isEnabled);
     }
 }

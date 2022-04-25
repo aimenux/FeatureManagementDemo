@@ -1,47 +1,38 @@
-﻿using ConsoleApp.Filters.Contexts.Identity;
+﻿using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 using System.Threading.Tasks;
 
-namespace ConsoleApp.Filters
+namespace ConsoleApp.Filters;
+
+[FilterAlias("Identity")]
+public class IdentityUserFeatureFilter : IFeatureFilter
 {
-    [FilterAlias(Alias)]
-    public class IdentityUserFeatureFilter : IFeatureFilter
+    private readonly ContextualTargetingFilter _contextualTargetingFilter;
+    private readonly ILogger _logger;
+
+    public IdentityUserFeatureFilter(ContextualTargetingFilter contextualTargetingFilter, ILogger logger)
     {
-        private const string Alias = "Identity";
+        _contextualTargetingFilter = contextualTargetingFilter ?? throw new ArgumentNullException(nameof(contextualTargetingFilter));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
 
-        private readonly ContextualTargetingFilter _contextualTargetingFilter;
-        private readonly IIdentityUserProvider _identityUserProvider;
-        private readonly ILogger _logger;
+    public async Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
+    {
+        const string userId = "Alice";
 
-        public IdentityUserFeatureFilter(
-            ContextualTargetingFilter contextualTargetingFilter,
-            IIdentityUserProvider identityUserProvider,
-            ILogger logger)
+        var targetingContext = new TargetingContext
         {
-            _contextualTargetingFilter = contextualTargetingFilter;
-            _identityUserProvider = identityUserProvider;
-            _logger = logger;
+            UserId = userId
+        };
+
+        var isEnabled = await _contextualTargetingFilter.EvaluateAsync(context, targetingContext);
+        if (!isEnabled)
+        {
+            _logger.LogWarning($"Feature '{context.FeatureName}' is not enabled for current user '{userId}'.");
         }
 
-        public async Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
-        {
-            var identityUser = await _identityUserProvider.GetRandomIdentityUserAsync();
-
-            var targetingContext = new TargetingContext
-            {
-                UserId = identityUser.Id,
-                Groups = identityUser.Groups
-            };
-
-            var isEnabled = await _contextualTargetingFilter.EvaluateAsync(context, targetingContext);
-            if (!isEnabled)
-            {
-                _logger.LogWarning($"Feature '{Alias}' is not enabled for current identity user '{identityUser}'.");
-            }
-
-            return isEnabled;
-        }
+        return isEnabled;
     }
 }

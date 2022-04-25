@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp.Constants
+﻿namespace ConsoleApp.Models
 {
     public enum FeatureFlags
     {
@@ -12,6 +12,7 @@
         FeatureH,
         FeatureI,
         FeatureJ,
-        FeatureK
+        FeatureK,
+        FeatureL
     }
 }

@@ -1,31 +1,34 @@
-﻿using ConsoleApp.Helpers;
+﻿using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using System.Threading.Tasks;
 
-namespace ConsoleApp.Filters
+namespace ConsoleApp.Filters;
+
+[FilterAlias("Random")]
+public class RandomFeatureFilter : IFeatureFilter
 {
-    [FilterAlias(Alias)]
-    public class RandomFeatureFilter : IFeatureFilter
+    private readonly ILogger _logger;
+
+    public RandomFeatureFilter(ILogger logger)
     {
-        private const string Alias = "Random";
+        _logger = logger;
+    }
 
-        private readonly ILogger _logger;
-
-        public RandomFeatureFilter(ILogger logger)
+    public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
+    {
+        var value = GetRandomNumber();
+        var isEnabled = value % 3 == 0;
+        if (!isEnabled)
         {
-            _logger = logger;
+            _logger.LogWarning($"Feature '{context.FeatureName}' is not enabled for current value '{value}'.");
         }
+        return Task.FromResult(isEnabled);
+    }
 
-        public Task<bool> EvaluateAsync(FeatureFilterEvaluationContext context)
-        {
-            var value = Randomize.RandomNumber();
-            var isEnabled = value % 3 == 0;
-            if (!isEnabled)
-            {
-                _logger.LogWarning($"Feature '{Alias}' is not enabled for current value '{value}'.");
-            }
-            return Task.FromResult(isEnabled);
-        }
+    private static int GetRandomNumber()
+    {
+        var random = new Random(Guid.NewGuid().GetHashCode());
+        return random.Next(0, int.MaxValue);
     }
 }
