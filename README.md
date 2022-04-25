@@ -1,4 +1,4 @@
-![.NET 5.0](https://github.com/aimenux/FeatureManagementDemo/workflows/.NET%205.0/badge.svg)
+[![.NET](https://github.com/aimenux/FeatureManagementDemo/actions/workflows/ci.yml/badge.svg)](https://github.com/aimenux/FeatureManagementDemo/actions/workflows/ci.yml)
 
 # FeatureManagementDemo
 ```
@@ -14,4 +14,4 @@ Playing with feature management library
 > - Targeting feature filters
 > 
 
-**`Tools`** : vs19, net 5.0, feature management
+**`Tools`** : vs22, net 6.0, feature management
